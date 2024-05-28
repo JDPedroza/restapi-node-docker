@@ -30,7 +30,7 @@ jobs:
 
       - name: SSH into server
         run: |
-          sshpass -p ${{ secrets.AUTH_PASS }} ssh -o StrictHostKeyChecking=no ${{ secrets.AUTH_SERVER }} << EOF
+          sshpass ssh -o StrictHostKeyChecking=no -i <(echo "${{ secrets.PRIVATE_KEY }}") ${{ secrets.AUTH_SERVER }} << EOF
             cd restapi-node/
             docker login ghcr.io -u JDPedroza -p ${{ secrets.TOKEN_GITHUB }}
             docker pull ghcr.io/jdpedroza/restapi-node-docker:latest
