@@ -18,8 +18,8 @@ jobs:
           password: ${{ secrets.TOKEN_GITHUB }}
       - name: Build image
         run: |
-          docker build . --tag ghcr.io/JDPedroza/restapi-node-docker:latest
-          docker push ghcr.io/JDPedroza/restapi-node-docker:latest
+          docker build . --tag ghcr.io/jdpedroza/restapi-node-docker:latest
+          docker push ghcr.io/jdpedroza/restapi-node-docker:latest
 
   deploy:
     needs: create-docker-image
@@ -32,9 +32,9 @@ jobs:
         run: |
           sshpass -p ${{ secrets.AUTH_PASS }} ssh -o StrictHostKeyChecking=no ${{ secrets.AUTH_SERVER }} << EOF
             cd restapi-node/
-            docker login ghcr.io -u JDPedroza -p ${{ secrets.TOKEN_CD }}
-            docker pull ghcr.io/JDPedroza/restapi-node-docker:latest
+            docker login ghcr.io -u JDPedroza -p ${{ secrets.TOKEN_GITHUB }}
+            docker pull ghcr.io/jdpedroza/restapi-node-docker:latest
             docker stop restapinode || true
             docker rm restapinode || true
-            docker run -d -p 4000:3000 --name restapinode ghcr.io/JDPedroza/restapi-node-docker:latest
+            docker run -d -p 4000:3000 --name restapinode ghcr.io/jdpedroza/restapi-node-docker:latest
           EOF
